@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bookstore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +26,13 @@ namespace Bookstore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<BookstoreContext>(options =>
+            {
+                options.UseSqlite(Configuration["ConnectionStrings:BookDBConnection"]);
+
+            });
+
+            services.AddScoped<IBookstoreRepository, EFBookstoreRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +57,23 @@ namespace Bookstore
 
             app.UseEndpoints(endpoints =>
             {
+
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    "CategoryPage",
+                    "{category}/Page{pageNum}",
+                    new { Controller = "Home", action = "Index" });
+
+                endpoints.MapControllerRoute(
+                    "Paging",
+                    "{pageNum}",
+                    new { Controller = "Home", action = "Index", pageNum = 1 });
+
+                endpoints.MapControllerRoute(
+                    "Category",
+                    "{category}",
+                    new { Controller = "Home", action = "Index", pageNum = 1 });
+
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

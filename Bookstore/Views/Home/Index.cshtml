@@ -4,20 +4,30 @@
 
 @model Bookstore.Models.ViewModels.BooksViewModel
 
-<h1 class="mb-4 text-white">Book Store</h1>
-
 @foreach (Bookstore.Models.Book b in Model.Books)
 {
+    <div class="card card-outline-primary m-1 p-1">
+
+        <div class="bg-light p-1">
+            <h4>@b.Title</h4>
+
+            <span class="badge bg-info" style="float:left; color:white">Price: @b.Price</span>
+        </div>
+
         <ul>
-            <li class="list-group-item active">@b.Title</li>
-            <li class="list-group-item">Author: @b.Author</li>
-            <li class="list-group-item">Publisher: @b.Publisher</li>
-            <li class="list-group-item">Isbn: @b.Isbn</li>
-            <li class="list-group-item">Classification: @b.Classification</li>
-            <li class="list-group-item">Category: @b.Category</li>
-            <li class="list-group-item">PageCount: @b.PageCount</li>
-            <li class="list-group-item">Price: @b.Price</li>
+            <li>Author: @b.Author</li>
+            <li>Publisher: @b.Publisher</li>
+            <li>Isbn: @b.Isbn</li>
+            <li>Classification: @b.Classification</li>
+            <li>Category: @b.Category</li>
+            <li>PageCount: @b.PageCount</li>
         </ul>
+    </div>
+    //<partial name="BookSummary" model="b" />
 }
 
-<div page-blah="@Model.PageInfo" page-action="" class="text-white"></div>
+<div page-blah="@Model.PageInfo" page-action=""
+     page-class="btn" page-class-normal="btn-outline-dark"
+     page-class-selected="btn-primary" class="btn-group pull-right m-1"
+     page-classes-enabled="true">
+</div>
